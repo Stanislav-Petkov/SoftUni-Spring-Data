@@ -1,0 +1,895 @@
+//one to one unidirectional  
+one student can have 1 teacher
+
+//student
+
+package app.domain.entities;
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = "students")
+public class Student extends Person {
+
+    private int grade;
+
+    private Teacher teacher;
+
+    public Student(){
+
+    }
+    public Student(String firstName, String lastName, int grade){
+       super(firstName,lastName);
+       setGrade(grade);
+    }
+
+    @Column
+    public int getGrade() {
+        return grade;
+    }
+
+    public void setGrade(int grade) {
+        this.grade = grade;
+    }
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "teacher_id", referencedColumnName = "id")
+    public Teacher getTeacher() {
+        return teacher;
+    }
+
+    public void setTeacher(Teacher teacher) {
+        this.teacher = teacher;
+    }
+}
+
+
+
+//teacher
+
+
+package app.domain.entities;
+
+import org.hibernate.annotations.GeneratorType;
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = "teachers")
+public class Teacher extends Person {
+
+    private String degree;
+
+    public Teacher(){
+    }
+    public Teacher(String firstName, String lastName, String degree){
+        super(firstName,lastName);
+        setDegree(degree);
+    }
+
+
+    public String getDegree() {
+        return degree;
+    }
+
+    public void setDegree(String degree) {
+        this.degree = degree;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//person
+
+package app.domain.entities;
+
+import javax.persistence.*;
+
+@MappedSuperclass
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+public class Person {
+
+    private long id;
+    private String firstName;
+    private String lastName;
+
+    protected Person(){
+    }
+
+    protected Person(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    @Column(name = "first_name")
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    @Column(name = "last_name")
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+}
+
+
+//main
+
+package app.domain;
+
+import app.domain.entities.Person;
+import app.domain.entities.Student;
+import app.domain.entities.Teacher;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+
+public class Main {
+    public static void main(String[] args) {
+
+        EntityManagerFactory entityManagerFactory = Persistence
+                .createEntityManagerFactory("codeFirst");
+
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+
+        Teacher teacher = new Teacher("Dimitur","Dimitrov","Java M");
+        Student student = new Student("Gosho","Georgiev",8);
+        student.setTeacher(teacher);
+
+        entityManager.getTransaction().begin();
+        //Person person = entityManager.find(Student.class, (long) 1);
+        //Person person = entityManager.find(Student.class, (long) 1);
+        entityManager.persist(student);
+//        entityManager.persist(teacher);
+        entityManager.getTransaction().commit();
+        entityManager.close();
+
+        Teacher teacher1 = student.getTeacher();
+
+    }
+}
+
+
+
+
+
+
+
+
+/////////////// ONE TO ONE BIDIRECTIONAL  //////////////////
+
+//person
+package app.domain.entities;
+
+import javax.persistence.*;
+
+@MappedSuperclass
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+public class Person {
+
+    private long id;
+    private String firstName;
+    private String lastName;
+
+    protected Person(){
+    }
+
+    protected Person(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    @Column(name = "first_name")
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    @Column(name = "last_name")
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+}
+
+
+//student
+package app.domain.entities;
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = "students")
+public class Student extends Person {
+
+    private int grade;
+
+    private Teacher teacher;
+
+    public Student(){
+
+    }
+    public Student(String firstName, String lastName, int grade){
+       super(firstName,lastName);
+       setGrade(grade);
+    }
+
+    @Column
+    public int getGrade() {
+        return grade;
+    }
+
+    public void setGrade(int grade) {
+        this.grade = grade;
+    }
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "teacher_id", referencedColumnName = "id")
+    public Teacher getTeacher() {
+        return teacher;
+    }
+
+    public void setTeacher(Teacher teacher) {
+        this.teacher = teacher;
+    }
+}
+
+// teacher
+
+package app.domain.entities;
+
+import org.hibernate.annotations.GeneratorType;
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = "teachers")
+public class Teacher extends Person {
+
+    private String degree;
+
+    private Student student;
+
+    public Teacher(){
+    }
+    public Teacher(String firstName, String lastName, String degree){
+        super(firstName,lastName);
+        setDegree(degree);
+    }
+
+
+    public String getDegree() {
+        return degree;
+    }
+
+    public void setDegree(String degree) {
+        this.degree = degree;
+    }
+
+    // this value teacher it the private teacher parameter object from the Student class
+    @OneToOne(mappedBy = "teacher")
+    public Student getStudent(){
+        return this.student;
+    }
+
+    public void setStudent(Student student){
+        this.student = student;
+    }
+}
+
+
+
+
+
+//main
+package app.domain;
+
+import app.domain.entities.Student;
+import app.domain.entities.Teacher;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+
+public class Main {
+    public static void main(String[] args) {
+
+        EntityManagerFactory entityManagerFactory = Persistence
+                .createEntityManagerFactory("codeFirst");
+
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+
+        Teacher teacher = new Teacher("Dimitur", "Dimitrov", "Java M");
+        Student student = new Student("Gosho", "Georgiev", 8);
+        student.setTeacher(teacher);
+
+        entityManager.getTransaction().begin();
+        //Person person = entityManager.find(Student.class, (long) 1);
+        //Person person = entityManager.find(Student.class, (long) 1);
+        entityManager.persist(student);
+//        entityManager.persist(teacher);
+        entityManager.getTransaction().commit();
+        entityManager.close();
+
+        Teacher teacher1 = student.getTeacher();
+        // with bidirectional OneToOne relations we have access to student from a teacher
+
+        Student student1 = teacher.getStudent();
+    }
+}
+
+
+
+///////////////  ONE TO MANY  ///////////////
+where there is a Set<> there is NO JoinColumn
+where there is a Set<> there is OneToMany(mappedBy = "")
+
+// class project 
+@OneToMany(mappedBy = "project")
+    public Set<Student> getStudents() {
+        return students;
+    }
+
+where there is ManyToOne there is 1 enetity
+
+// class student
+public Project getProject(){
+        return this.project;
+    }
+	
+
+//person
+package app.domain.entities;
+
+import javax.persistence.*;
+
+@MappedSuperclass
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+public class Person {
+
+    private long id;
+    private String firstName;
+    private String lastName;
+
+    protected Person(){
+    }
+
+    protected Person(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    @Column(name = "first_name")
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    @Column(name = "last_name")
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+}
+
+
+//project
+package app.domain.entities;
+
+import javax.persistence.*;
+import java.util.Set;
+
+@Entity
+@Table(name = "projects")
+public class Project {
+
+    private int id;
+
+    private String name;
+
+    private Set<Student> students; // One project can have many students
+
+    public Project(){
+
+    }
+
+    public Project(String name){
+        setName(name);
+    }
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    @Column
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @OneToMany(mappedBy = "project")
+    public Set<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(Set<Student> students) {
+        this.students = students;
+    }
+}
+
+
+
+//student
+
+package app.domain.entities;
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = "students")
+public class Student extends Person {
+
+    private int grade;
+
+    private Project project; // one project can have many students
+
+    public Student(){
+
+    }
+    public Student(String firstName, String lastName, int grade){
+       super(firstName,lastName);
+       setGrade(grade);
+    }
+
+    @Column
+    public int getGrade() {
+        return grade;
+    }
+
+    public void setGrade(int grade) {
+        this.grade = grade;
+    }
+
+
+    // Target entity is Project and this column project_id references id in Project class
+    // project_id will be the name of the column in students table where the id from the
+    // projects table will be written
+    @ManyToOne
+    @JoinColumn(name = "project_id", referencedColumnName = "id")
+    public Project getProject(){
+        return this.project;
+    }
+
+    public void setProject(Project project){
+        this.project = project;
+    }
+}
+
+
+
+//  teacher
+
+package app.domain.entities;
+
+import org.hibernate.annotations.GeneratorType;
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = "teachers")
+public class Teacher extends Person {
+
+    private String degree;
+
+    private Student student;
+
+    public Teacher(){
+    }
+    public Teacher(String firstName, String lastName, String degree){
+        super(firstName,lastName);
+        setDegree(degree);
+    }
+
+
+    public String getDegree() {
+        return degree;
+    }
+
+    public void setDegree(String degree) {
+        this.degree = degree;
+    }
+
+
+}
+
+
+
+//main
+
+
+package app.domain;
+
+import app.domain.entities.Project;
+import app.domain.entities.Student;
+import app.domain.entities.Teacher;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import java.util.ArrayList;
+import java.util.List;
+
+public class Main {
+    public static void main(String[] args) {
+
+        EntityManagerFactory entityManagerFactory = Persistence
+                .createEntityManagerFactory("codeFirst");
+
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+
+        Student student = new Student("Gosho", "Georgiev", 8);
+
+        List<Project> projects = new ArrayList<>();
+
+        Project project = new Project("Math");
+        Project project1 = new Project("Science");
+        Project project2 = new Project("Biology");
+        Project project3 = new Project("Chemistry");
+
+        projects.add(project);
+        projects.add(project1);
+        projects.add(project2);
+        projects.add(project3);
+
+        entityManager.getTransaction().begin();
+        entityManager.persist(project);
+        entityManager.getTransaction().commit();
+
+        student.setProject(project);
+
+        entityManager.getTransaction().begin();
+        entityManager.persist(student);
+        entityManager.getTransaction().commit();
+        entityManager.close();
+
+    }
+}
+
+///////////////////////////////  MANY TO MANY //////////////////////////////
+unidirectional 1 student can have many project
+I can access the rojects from the student
+
+// student
+
+package app.domain.entities;
+
+import javax.persistence.*;
+import java.util.Set;
+
+@Entity
+@Table(name = "students")
+public class Student extends Person {
+
+    private int grade;
+
+    private Set<Project> projects;
+
+    public Student(){
+
+    }
+    public Student(String firstName, String lastName, int grade){
+       super(firstName,lastName);
+       setGrade(grade);
+    }
+
+    @Column
+    public int getGrade() {
+        return grade;
+    }
+
+    public void setGrade(int grade) {
+        this.grade = grade;
+    }
+
+    // Make a new table
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "students_projects",
+            joinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "project_id",referencedColumnName = "id"))
+    public Set<Project> getProjects(){
+        return this.projects;
+    }
+
+    public void setProjects(Set<Project> projects){
+        this.projects = projects;
+    }
+}
+
+
+// project
+
+package app.domain.entities;
+
+import javax.persistence.*;
+import java.util.Set;
+
+@Entity
+@Table(name = "projects")
+public class Project {
+
+    private int id;
+
+    private String name;
+
+    public Project(){
+
+    }
+
+    public Project(String name){
+        setName(name);
+    }
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    @Column
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+
+}
+
+
+// main
+package app.domain;
+
+import app.domain.entities.Project;
+import app.domain.entities.Student;
+import app.domain.entities.Teacher;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+public class Main {
+    public static void main(String[] args) {
+
+        EntityManagerFactory entityManagerFactory = Persistence
+                .createEntityManagerFactory("codeFirst");
+
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+
+        Student student = new Student("Gosho", "Georgiev", 8);
+
+        Set<Project> projects = new HashSet<>();
+
+        Project project = new Project("Math");
+        Project project1 = new Project("Science");
+        Project project2 = new Project("Biology");
+        Project project3 = new Project("Chemistry");
+
+        projects.add(project);
+        projects.add(project1);
+        projects.add(project2);
+        projects.add(project3);
+
+        student.setProjects(projects);
+
+        entityManager.getTransaction().begin();
+        entityManager.persist(student);
+        entityManager.getTransaction().commit();
+
+        entityManager.close();
+
+    }
+}
+
+
+
+
+
+
+//teacher
+
+package app.domain.entities;
+
+import org.hibernate.annotations.GeneratorType;
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = "teachers")
+public class Teacher extends Person {
+
+    private String degree;
+
+    private Student student;
+
+    public Teacher(){
+    }
+    public Teacher(String firstName, String lastName, String degree){
+        super(firstName,lastName);
+        setDegree(degree);
+    }
+
+
+    public String getDegree() {
+        return degree;
+    }
+
+    public void setDegree(String degree) {
+        this.degree = degree;
+    }
+
+
+}
+
+
+
+//person
+
+package app.domain.entities;
+
+import javax.persistence.*;
+
+@MappedSuperclass
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+public class Person {
+
+    private long id;
+    private String firstName;
+    private String lastName;
+
+    protected Person(){
+    }
+
+    protected Person(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    @Column(name = "first_name")
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    @Column(name = "last_name")
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+}
+
+
+///////////////////////  MANY TO MANY BIDIRECTIONAL ////////////////////////////
+
+we can access the students from the projects
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

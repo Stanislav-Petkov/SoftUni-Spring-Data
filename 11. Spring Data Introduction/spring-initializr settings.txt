@@ -1,0 +1,61 @@
+Configure Lombok plugin
+File -> Settings -> plugins -> Install
+
+File -> Settings -> Buil, Execution, deployment -> Annotation Processor ->Enable annotation processing
+
+Developer Tools  :
+Spring Boot DevTools
+Lombok
+
+SQL:
+Spring Data JPA
+MySQL Driver
+
+Ops:
+Spring Boot Actuator
+
+Web:
+Spring Web
+
+Spring Boot:
+2.2.9
+
+
+http://localhost:8080/actuator/info
+
+Koi binove e zaredil
+http://localhost:8080/actuator/beans
+
+Mysql Info:
+http://localhost:8080/actuator/health
+
+list ot metriki
+http://localhost:8080/actuator/metrics
+
+JVM kolko pamet ili procesorno vreme habi
+http://localhost:8080/actuator/metrics/jvm.memory.max
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="2bbf9778-98f4-4d66-b467-851a6c943e5a" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_DATA_SOURCES" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <option name="HIDDEN_KINDS">
+      <set />
+    </option>
+    <expand>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="@localhost" type="feb32156:DbDataSourceImpl" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="@localhost" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="@localhost" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="school: schema" type="76f4a085:MysqlImplModel$Schema" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="importingSettings">
+      <MavenImportingSettings>
+        <option name="importAutomatically" value="true" />
+      </MavenImportingSettings>
+    </option>
+  </component>
+  <component name="ProjectId" id="1cgHnbCSGp1B6Y9oD8OkVqKfKqz" />
+  <component name="ProjectViewState">
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="DatabaseDriversLRU" value="mysql" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="extract.method.default.visibility" value="private" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="project.structure.last.edited" value="Facets" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="reference.projectsettings.compiler.annotationProcessors" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="demos.hibernate" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.JpaDemoMain">
+    <configuration name="CreateNewEntity" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="demos.hibernate.CreateNewEntity" />
+      <module name="introduction-to-hibernate" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="demos.hibernate.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="HibernateDemoMain" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="demos.hibernate.HibernateDemoMain" />
+      <module name="introduction-to-hibernate" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="demos.hibernate.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="JpaDemoMain" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="demos.hibernate.JpaDemoMain" />
+      <module name="introduction-to-hibernate" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="demos.hibernate.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="PrintEntities" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="demos.hibernate.PrintEntities" />
+      <module name="introduction-to-hibernate" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="demos.hibernate.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="PrintWithCriteriaBuilder" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="demos.hibernate.PrintWithCriteriaBuilder" />
+      <module name="introduction-to-hibernate" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="demos.hibernate.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.JpaDemoMain" />
+        <item itemvalue="Application.PrintWithCriteriaBuilder" />
+        <item itemvalue="Application.PrintEntities" />
+        <item itemvalue="Application.HibernateDemoMain" />
+        <item itemvalue="Application.CreateNewEntity" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="2bbf9778-98f4-4d66-b467-851a6c943e5a" name="Default Changelist" comment="" />
+      <created>1590943483190</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1590943483190</updated>
+      <workItem from="1590943484819" duration="4217000" />
+      <workItem from="1590990062205" duration="26838000" />
+      <workItem from="1595576770283" duration="153000" />
+      <workItem from="1596101788661" duration="10000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="0" y="55" key="#Auto_Import" timestamp="1591035017370">
+      <screen x="0" y="0" width="1366" height="738" />
+    </state>
+    <state x="0" y="55" key="#Auto_Import/0.0.1366.738@0.0.1366.738" timestamp="1591035017370" />
+    <state x="550" y="55" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1591008192771">
+      <screen x="0" y="0" width="1366" height="738" />
+    </state>
+    <state x="550" y="55" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.738@0.0.1366.738" timestamp="1591008192771" />
+    <state width="1312" height="216" key="GridCell.Tab.0.bottom" timestamp="1591069757077">
+      <screen x="0" y="0" width="1366" height="738" />
+    </state>
+    <state width="1312" height="216" key="GridCell.Tab.0.bottom/0.0.1366.738@0.0.1366.738" timestamp="1591069757077" />
+    <state width="1312" height="216" key="GridCell.Tab.0.center" timestamp="1591069757077">
+      <screen x="0" y="0" width="1366" height="738" />
+    </state>
+    <state width="1312" height="216" key="GridCell.Tab.0.center/0.0.1366.738@0.0.1366.738" timestamp="1591069757077" />
+    <state width="1312" height="216" key="GridCell.Tab.0.left" timestamp="1591069757077">
+      <screen x="0" y="0" width="1366" height="738" />
+    </state>
+    <state width="1312" height="216" key="GridCell.Tab.0.left/0.0.1366.738@0.0.1366.738" timestamp="1591069757077" />
+    <state width="1312" height="216" key="GridCell.Tab.0.right" timestamp="1591069757077">
+      <screen x="0" y="0" width="1366" height="738" />
+    </state>
+    <state width="1312" height="216" key="GridCell.Tab.0.right/0.0.1366.738@0.0.1366.738" timestamp="1591069757077" />
+    <state width="1312" height="216" key="GridCell.Tab.1.bottom" timestamp="1591069757077">
+      <screen x="0" y="0" width="1366" height="738" />
+    </state>
+    <state width="1312" height="216" key="GridCell.Tab.1.bottom/0.0.1366.738@0.0.1366.738" timestamp="1591069757077" />
+    <state width="1312" height="216" key="GridCell.Tab.1.center" timestamp="1591069757077">
+      <screen x="0" y="0" width="1366" height="738" />
+    </state>
+    <state width="1312" height="216" key="GridCell.Tab.1.center/0.0.1366.738@0.0.1366.738" timestamp="1591069757077" />
+    <state width="1312" height="216" key="GridCell.Tab.1.left" timestamp="1591069757077">
+      <screen x="0" y="0" width="1366" height="738" />
+    </state>
+    <state width="1312" height="216" key="GridCell.Tab.1.left/0.0.1366.738@0.0.1366.738" timestamp="1591069757077" />
+    <state width="1312" height="216" key="GridCell.Tab.1.right" timestamp="1591069757077">
+      <screen x="0" y="0" width="1366" height="738" />
+    </state>
+    <state width="1312" height="216" key="GridCell.Tab.1.right/0.0.1366.738@0.0.1366.738" timestamp="1591069757077" />
+    <state width="196" height="457" key="HiddenNamespacesPopup" timestamp="1591008634715">
+      <screen x="0" y="0" width="1366" height="738" />
+    </state>
+    <state width="196" height="457" key="HiddenNamespacesPopup/0.0.1366.738@0.0.1366.738" timestamp="1591008634715" />
+    <state x="252" y="0" key="SettingsEditor" timestamp="1591034529636">
+      <screen x="0" y="0" width="1366" height="738" />
+    </state>
+    <state x="252" y="0" key="SettingsEditor/0.0.1366.738@0.0.1366.738" timestamp="1591034529636" />
+    <state x="423" y="207" key="com.intellij.ide.util.TipDialog" timestamp="1590990075706">
+      <screen x="0" y="0" width="1366" height="738" />
+    </state>
+    <state x="423" y="207" key="com.intellij.ide.util.TipDialog/0.0.1366.738@0.0.1366.738" timestamp="1590990075706" />
+    <state x="471" y="239" key="extract.method.dialog" timestamp="1591034897435">
+      <screen x="0" y="0" width="1366" height="738" />
+    </state>
+    <state x="471" y="239" key="extract.method.dialog/0.0.1366.738@0.0.1366.738" timestamp="1591034897435" />
+    <state x="401" y="59" width="672" height="678" key="search.everywhere.popup" timestamp="1591014290021">
+      <screen x="0" y="0" width="1366" height="738" />
+    </state>
+    <state x="401" y="59" width="672" height="678" key="search.everywhere.popup/0.0.1366.738@0.0.1366.738" timestamp="1591014290021" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/demos/hibernate/PrintWithCriteriaBuilder.java</url>
+          <line>16</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>

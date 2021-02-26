@@ -1,0 +1,41 @@
+// first save the nested objects phones
+// find the nested telephoneNumber values +111111 and set them to my user
+// then save the user
+
+After we import UserRootDto to a java object
+we get the phone, save it in the database,then set it to its user and save the user
++111111
+Phone
+save
+get it
+set User
+save User
+
+users.xml
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<users>
+    <user>
+        <first_name>Konstantin</first_name>
+        <lastName>Mitev</lastName>
+        <city>Sofia</city>
+        <phones>
+            <phone>
+                <phoneNumber>+111111111</phoneNumber>
+            </phone>
+            <phone>
+                <phoneNumber>+11111222222</phoneNumber>
+            </phone>
+        </phones>
+    </user>
+    <user>
+        <first_name>Gosho</first_name>
+        <lastName>Petkov</lastName>
+        <city>Varna</city>
+        <phones>
+            <phone>
+                <phoneNumber>+333333333</phoneNumber>
+            </phone>
+        </phones>
+    </user>
+</users>
+

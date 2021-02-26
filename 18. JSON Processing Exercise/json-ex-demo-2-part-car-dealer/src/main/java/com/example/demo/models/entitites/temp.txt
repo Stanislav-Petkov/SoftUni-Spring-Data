@@ -1,0 +1,325 @@
+package com.example.demo.models.entitites;
+
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
+
+@MappedSuperclass
+public abstract class BaseEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    public BaseEntity() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+}
+
+
+
+package com.example.demo.models.entitites;
+
+import jdk.jfr.Enabled;
+
+import javax.persistence.*;
+import java.util.Set;
+
+@Entity
+@Table(name = "cars")
+public class Car extends BaseEntity{
+
+    @Column
+    private String make;
+
+    @Column
+    private String model;
+
+    @Column
+    private int travelled_distance;
+
+    @ManyToMany(mappedBy = "cars")
+    private Set<Part> parts;
+
+//    @OneToOne
+//    private Sale sale;
+
+    public Car() {
+    }
+
+    public String getMake() {
+        return make;
+    }
+
+    public void setMake(String make) {
+        this.make = make;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public void setModel(String model) {
+        this.model = model;
+    }
+
+    public int getTravelled_distance() {
+        return travelled_distance;
+    }
+
+    public void setTravelled_distance(int travelled_distance) {
+        this.travelled_distance = travelled_distance;
+    }
+
+    public Set<Part> getParts() {
+        return parts;
+    }
+
+    public void setParts(Set<Part> parts) {
+        this.parts = parts;
+    }
+
+//    public Sale getSale() {
+//        return sale;
+//    }
+//
+//    public void setSale(Sale sale) {
+//        this.sale = sale;
+//    }
+}
+
+
+package com.example.demo.models.entitites;
+
+import javax.persistence.*;
+import java.util.Date;
+import java.util.Set;
+
+@Entity
+@Table(name = "customers")
+public class Customer extends BaseEntity {
+    @Column
+    private String name;
+
+    @Column
+    private Date birth_date;
+
+    @Column
+    private boolean is_young_driver;
+
+
+
+    public Customer() {
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Date getBirth_date() {
+        return birth_date;
+    }
+
+    public void setBirth_date(Date birth_date) {
+        this.birth_date = birth_date;
+    }
+
+    public boolean isIs_young_driver() {
+        return is_young_driver;
+    }
+
+    public void setIs_young_driver(boolean is_young_driver) {
+        this.is_young_driver = is_young_driver;
+    }
+
+
+}
+
+
+
+package com.example.demo.models.entitites;
+
+import javax.persistence.*;
+import java.math.BigDecimal;
+import java.util.Set;
+
+@Entity
+@Table(name = "parts")
+public class Part extends BaseEntity{
+
+    @Column
+    private String name;
+
+    @Column
+    private BigDecimal price;
+
+    @Column
+    private int quantity;
+
+    @ManyToOne
+    @JoinColumn(name = "supplier_id", referencedColumnName = "id")
+    private Supplier supplierId;
+
+    @ManyToMany
+    @JoinTable(name = "parts_cars",
+    joinColumns = @JoinColumn(name = "part_id", referencedColumnName = "id"),
+    inverseJoinColumns = @JoinColumn(name = "car_id",referencedColumnName = "id"))
+    private Set<Car> cars;
+
+    public Part() {
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public Supplier getSupplierId() {
+        return supplierId;
+    }
+
+    public void setSupplierId(Supplier supplierId) {
+        this.supplierId = supplierId;
+    }
+
+    public Set<Car> getCars() {
+        return cars;
+    }
+
+    public void setCars(Set<Car> cars) {
+        this.cars = cars;
+    }
+}
+
+
+package com.example.demo.models.entitites;
+
+import javax.persistence.*;
+import java.math.BigDecimal;
+
+@Entity
+@Table(name = "sales")
+public class Sale extends BaseEntity{
+
+    @Column
+    private BigDecimal discount;
+
+    // 1 sale can have 1 car
+    @OneToOne
+    @JoinColumn(name = "car_id", referencedColumnName = "id")
+    private Car carId;
+
+    //Each Sale has 1 Customer
+    // A Customer can buy many cars
+    @ManyToOne
+    @JoinColumn(name = "customer_id", referencedColumnName = "id")
+    private Customer customerId;
+
+    public Sale() {
+    }
+
+    public BigDecimal getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(BigDecimal discount) {
+        this.discount = discount;
+    }
+
+    public Car getCarId() {
+        return carId;
+    }
+
+    public void setCarId(Car carId) {
+        this.carId = carId;
+    }
+
+    public Customer getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Customer customerId) {
+        this.customerId = customerId;
+    }
+}
+
+
+package com.example.demo.models.entitites;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import java.util.Set;
+
+@Entity
+@Table(name = "suppliers")
+public class Supplier extends BaseEntity{
+
+    @Column
+    private String name;
+
+    @Column
+    private boolean is_importer;
+
+    @OneToMany(mappedBy = "supplierId")
+    private Set<Part> parts;
+
+    public Supplier() {
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public boolean isIs_importer() {
+        return is_importer;
+    }
+
+    public void setIs_importer(boolean is_importer) {
+        this.is_importer = is_importer;
+    }
+
+    public Set<Part> getParts() {
+        return parts;
+    }
+
+    public void setParts(Set<Part> parts) {
+        this.parts = parts;
+    }
+}

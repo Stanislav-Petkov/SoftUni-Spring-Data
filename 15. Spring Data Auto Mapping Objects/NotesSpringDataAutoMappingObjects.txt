@@ -1,0 +1,396 @@
+When to use @Bean
+
+https://stackoverflow.com/questions/10604298/spring-component-versus-bean#:~:text=You%20can%20use%20%40Bean%20to,your%20Spring%20framework%20application%20context.&text=By%20using%20the%20%40Bean%20annotation,)%2C%20as%20a%20Spring%20bean.
+
+public interface EmployeeService {
+    void save(EmployeeSeedDto employeeSeedDto);
+
+    // The service receives the entity from the database as a dto
+    // When I want to send an object from the service to the web layer I return a dto
+    // dto methodName();
+    // When I want to save or delete from the database the method in the service receives a dto
+}
+
+
+@Entity
+@Table(name = "employees")
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+public class Employee extends BaseEntity{
+
+
+    @Column(name = "first_name")
+    private String firstName;
+
+    @Column(name = "last_name")
+    private String lastName;
+
+    @Column
+    private double salary;
+
+    @ManyToOne
+    @JoinColumn(name = "address_id")
+    private Address address;
+	
+	
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+public class EmployeeSeedDto {
+    private String firstName;
+    private String lastName;
+    private double salary;
+    private String addressCity;
+}
+
+ void saveEmployeeDtoAsEmployeeEntityToTheDatabase() {
+        EmployeeSeedDto employeeSeedDto =
+                new EmployeeSeedDto("Ivan", "Draganov", 1500, "Sofia");
+        employeeService.save(employeeSeedDto);
+    }
+
+    void findEmployeeDtoFromTheDatabase() {
+        EmployeeViewDto employeeViewDto = this.employeeService.findByFnAndLn("Ivan", "Draganov");
+        System.out.println();
+    }
+	
+
+//It is a bad practice to call a repository here in the view layer 
+
+with engine design patter we simulate web
+https://tenmilesquare.com/basic-rules-engine-design-pattern/
+
+
+
+    //3 - WEB
+    //2 - Service
+    //1 - Data
+	the web layer should interact only with the service, and it should not know what database is used in the 
+	data layer
+	Service interacts with data and WEb
+	
+	----------------------------------- example
+	
+@Entity
+@Table(name = "cities")
+@NoArgsConstructor
+@Getter
+@Setter
+@AllArgsConstructor
+	public class City extends BaseEntity {
+
+    @Column
+    private String name;
+}
+
+@Entity
+@Table(name = "employees")
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+public class Employee extends BaseEntity{
+
+
+    @Column(name = "first_name")
+    private String firstName;
+
+    @Column(name = "last_name")
+    private String lastName;
+
+    @Column
+    private double salary;
+
+    @ManyToOne
+    @JoinColumn(name = "city_id")
+    private City city;
+}
+
+@NoArgsConstructor
+@Getter
+@Setter
+public class EmployeeViewDto {
+    private String firstName;
+    private double salary;
+    //this name is correct because Employee has a City, which has a name
+    // so EmployeeViewDto should have 	=> cityName so that the mapping is automatic
+    // with the modelMapper.map() method 
+    private String cityName;
+
+}
+
+@Configuration
+public class ApplicationBeanConfiguration {
+
+    @Bean
+    public ModelMapper modelMapper() {
+        return new ModelMapper();
+    }
+}
+---------------------------------------
+
+			SOURCE   , DESTINATION
+PropertyMap<EmployeeDto, Employee> employeeMap = new PropertyMap<EmployeeDto, Employee>() {
+          @Override
+          protected void configure() {	    map().setFirstName(source.getName());
+	    // Add mappings for other fields
+	    map().setAddressCity(source.getAddress().getCity().getName());
+          }
+};
+
+
+-------------------------------------------
+@Configuration
+public class ApplicationBeanConfiguration {
+
+    @Bean
+    public ModelMapper modelMapper() {
+
+        // make custom mapping when the field name in the dto class is not written correctly and 
+        // cannot be auto mapped instead of cityName the name of the field is address
+        
+        ModelMapper modelMapper = new ModelMapper();
+                    // Source, Destination
+        PropertyMap<Employee, EmployeeViewDto> propertyMap = new PropertyMap<Employee, EmployeeViewDto>() {
+            @Override
+            protected void configure() {
+                // map() refers to the destination and sets to it an address from the source
+                map().setAddress(source.getCity().getName());
+            }
+        };
+
+        modelMapper.addMappings(propertyMap);
+        return modelMapper;
+    }
+}
+
+
+// Another custom map solution of the upper class
+
+@Configuration
+public class ApplicationBeanConfiguration {
+
+    @Bean
+    public ModelMapper modelMapper() {
+
+        // make custom mapping when the field name in the dto class is not written correctly and
+        // cannot be auto mapped instead of cityName the name of the field is address
+
+        ModelMapper modelMapper = new ModelMapper();
+
+        TypeMap<Employee, EmployeeViewDto> typeMap = modelMapper.createTypeMap(Employee.class, EmployeeViewDto.class);
+        // Source                   , Destination
+        typeMap.addMappings(m -> m.map(src -> src.getCity().getName(), EmployeeViewDto::setAddress));
+
+                      // Source, Destination
+//        PropertyMap<Employee, EmployeeViewDto> propertyMap = new PropertyMap<Employee, EmployeeViewDto>() {
+//            @Override
+//            protected void configure() {
+//                // map() refers to the destination and sets to it an address from the source
+//                map().setAddress(source.getCity().getName());
+//            }
+//        };
+
+//        modelMapper.addMappings(propertyMap);
+        return modelMapper;
+    }
+}
+
+
+@NoArgsConstructor
+@Getter
+@Setter
+public class EmployeeViewDto {
+    private String firstName;
+    private double salary;
+    //this name is correct because Employee has a City, which has a name
+    // so EmployeeViewDto should have 	=> cityName so that the mapping is automatic
+    // with the modelMapper.map() method
+    private String address;
+
+}
+
+@Entity
+@Table(name = "cities")
+@NoArgsConstructor
+@Getter
+@Setter
+@AllArgsConstructor
+public class City extends BaseEntity {
+
+    @Column
+    private String name;
+}
+
+
+@Entity
+@Table(name = "employees")
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+public class Employee extends BaseEntity{
+
+
+    @Column(name = "first_name")
+    private String firstName;
+
+    @Column(name = "last_name")
+    private String lastName;
+
+    @Column
+    private double salary;
+
+    @ManyToOne
+    @JoinColumn(name = "city_id")
+    private City city;
+}
+
+
+
+
+   @Override
+    public void run(String... args) throws Exception {
+//        EmployeeSeedDto employeeSeedDto =
+//                new EmployeeSeedDto("Ivan","Ivanov",
+//                        1500, "Sofia");
+
+        // employeeSeedDto is turned into Employee and it is saved to the database
+
+//        this.employeeService.save(employeeSeedDto);
+//        CitySeedDto city1 = new CitySeedDto("Sofia");
+//        CitySeedDto city2 = new CitySeedDto("Plovdiv");
+//        CitySeedDto city3 = new CitySeedDto("Varna");
+//
+//        this.cityService.save(city1);
+//        this.cityService.save(city2);
+//        this.cityService.save(city3);
+
+        EmployeeViewDto employeeViewDto = this.employeeService.findByFnAndLn("Ivan","Ivanov");
+        System.out.println();
+
+    }
+-------------------------------------
+
+    PropertyMap<Employee, EmployeeViewDto> propertyMap = new PropertyMap<Employee, EmployeeViewDto>() {
+            @Override
+            protected void configure() {
+                // map() refers to the destination and sets to it an address from the source
+                map().setAddress(source.getCity().getName().toLowerCase());
+            }
+        };
+		
+Error Cannot map final type java.lang.String.
+
+When we use propertyMap we cannot use methods of strings numbers or others like .toLowerCase());
+
+
+-----------------------------------------------------
+/*
+// Add converter to modelMapper 
+@Configuration
+public class ApplicationBeanConfiguration {
+
+    @Bean
+    public ModelMapper modelMapper() {
+
+        // make custom mapping when the field name in the dto class is not written correctly and
+        // cannot be auto mapped instead of cityName the name of the field is address
+
+        ModelMapper modelMapper = new ModelMapper();
+
+//        TypeMap<Employee, EmployeeViewDto> typeMap = modelMapper.createTypeMap(Employee.class, EmployeeViewDto.class);
+        // Source                   , Destination
+//        typeMap.addMappings(m -> m.map(src -> src.getCity().getName(), EmployeeViewDto::setAddress));
+
+        // The Converter converts fields
+        // From mappingContext I can access source and destination
+        Converter<String, String> stringConverter = new Converter<String, String>() {
+            @Override
+            public String convert(MappingContext<String, String> mappingContext) {
+                return mappingContext.getSource() == null ? null : mappingContext.getSource().toLowerCase();
+            }
+        };
+
+                      // Source, Destination
+        PropertyMap<Employee, EmployeeViewDto> propertyMap = new PropertyMap<Employee, EmployeeViewDto>() {
+            @Override
+            protected void configure() {
+                // map() refers to the destination and sets to it an address from the source
+                map().setAddress(source.getCity().getName());
+            }
+        };
+
+        //  Error Cannot map final type java.lang.String.
+        //When we use propertyMap we cannot use methods of strings numbers or others like
+        // map().setAddress(source.getCity().getName().toLowerCase()); we should use Converter
+
+        modelMapper.addConverter(stringConverter);
+        modelMapper.addMappings(propertyMap);
+        return modelMapper;
+    }
+}
+ */
+ 
+ /*
+ @Configuration
+public class ApplicationBeanConfiguration {
+
+    @Bean
+    public ModelMapper modelMapper() {
+
+        // make custom mapping when the field name in the dto class is not written correctly and
+        // cannot be auto mapped instead of cityName the name of the field is address
+
+        ModelMapper modelMapper = new ModelMapper();
+
+//        TypeMap<Employee, EmployeeViewDto> typeMap = modelMapper.createTypeMap(Employee.class, EmployeeViewDto.class);
+        // Source                   , Destination
+//        typeMap.addMappings(m -> m.map(src -> src.getCity().getName(), EmployeeViewDto::setAddress));
+
+        // The Converter converts fields
+        // From mappingContext I can access source and destination
+        Converter<String, String> stringConverter = new Converter<String, String>() {
+            @Override
+            public String convert(MappingContext<String, String> mappingContext) {
+                return mappingContext.getSource() == null ? null : mappingContext.getSource().toLowerCase();
+            }
+        };
+
+                      // Source, Destination
+        PropertyMap<Employee, EmployeeViewDto> propertyMap = new PropertyMap<Employee, EmployeeViewDto>() {
+            @Override
+            protected void configure() {
+                // map() refers to the destination and sets to it an address from the source
+                map().setAddress(source.getCity().getName());
+//                using(stringConverter).map().setFirstName(source.getFirstName());
+                using(stringConverter).map(source.getFirstName()).setFirstName(null);
+            }
+        };
+
+        //  Error Cannot map final type java.lang.String.
+        //When we use propertyMap we cannot use methods of strings numbers or others like
+        // map().setAddress(source.getCity().getName().toLowerCase()); we should use Converter
+
+        modelMapper.addMappings(propertyMap);
+        return modelMapper;
+    }
+}
+
+-------------------------------------
+//Map Collections
+    @Override
+    public CityViewDto findByName(String name) {
+        City city = this.cityRepository.findByName(name);
+        CityViewDto cityViewDto = this.modelMapper.map(city, CityViewDto.class);
+        // Get the Employee Set from the city and for each Employee to be mapped to EmployeeViewDto
+        // Then collect all EmployeeViewDtos to Set in the cityViewDto
+        cityViewDto.setEmployeeViewDtoSet(city.getEmployees()
+                .stream()
+                .map(e -> this.modelMapper.map(e, EmployeeViewDto.class))
+                .collect(Collectors.toSet()));
+        return cityViewDto;
+    }

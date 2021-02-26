@@ -1,0 +1,25 @@
+//connect to db
+Connection connection =
+    DriverManager.getConnection(
+                "jdbc:mysql://localhost:3306/soft_uni?useSSL=false",props);
+
+//2. Connect to DB
+System.out.print("Driver loaded successfully");
+Connection connection =
+        DriverManager.getConnection(
+                "jdbc:mysql://root:root@localhost:3306/soft_uni?useSSL=false");
+System.out.println("Connected successfully.");
+
+####################################
+//purvata cifra e kolko da e dulug stringa ili chisloto a vtorate e kolko
+// do koi simvol da otreje stringa ili kolko zaka sled . da se pokazvat v chisloto
+//lqvo podravneno zaradi minusa  %-15.15s
+//dqsno podravneno po tochkata %10.2f
+while(rs.next()){
+            System.out.printf("| %-15.15s | %-15.15s | %10.2f |\n",
+                    rs.getString("first_name"),
+                    rs.getString("last_name"),
+                    rs.getDouble("salary")
+            );
+        }
+#####################################

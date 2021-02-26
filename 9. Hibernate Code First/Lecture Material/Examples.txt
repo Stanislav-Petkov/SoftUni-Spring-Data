@@ -1,0 +1,430 @@
+EXAMPLE 1 table per class
+// creates 2 tables , 1 for teacher, 1 for student
+
+package app.domain.entities;
+
+import javax.persistence.*;
+
+@MappedSuperclass  // does not create a table person 
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+public class Person {
+    private long id;
+    private String firstName;
+    private String lastName;
+
+    protected Person(){
+    }
+
+    protected Person(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    @Column(name = "first_name")
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    @Column(name = "last_name")
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+}
+
+//main
+package app.domain;
+
+import app.domain.entities.Person;
+import app.domain.entities.Student;
+import app.domain.entities.Teacher;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+
+public class Main {
+    public static void main(String[] args) {
+
+        EntityManagerFactory entityManagerFactory = Persistence
+                .createEntityManagerFactory("codeFirst");
+
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+
+        Person student = new Student("Gosho","Georgiev",8);
+        Person teacher = new Teacher("Dimitur","Dimitrov","Java M");
+
+        entityManager.getTransaction().begin();
+        //Person person = entityManager.find(Student.class, (long) 1);
+        //Person person = entityManager.find(Student.class, (long) 1);
+        entityManager.persist(student);
+        entityManager.persist(teacher);
+        entityManager.getTransaction().commit();
+        entityManager.close();
+
+    }
+}
+
+
+
+
+//student
+
+package app.domain.entities;
+
+import javax.persistence.*;
+
+@Entity // creates a table 
+@Table(name = "students")
+public class Student extends Person {
+
+    private int grade;
+
+    public Student(){
+
+    }
+    public Student(String firstName, String lastName, int grade){
+       super(firstName,lastName);
+       setGrade(grade);
+    }
+
+    @Column
+    public int getGrade() {
+        return grade;
+    }
+
+    public void setGrade(int grade) {
+        this.grade = grade;
+    }
+}
+
+
+//teacher
+
+
+package app.domain.entities;
+
+import org.hibernate.annotations.GeneratorType;
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = "teachers")
+public class Teacher extends Person {
+
+    private String degree;
+
+    public Teacher(){
+    }
+    public Teacher(String firstName, String lastName, String degree){
+        super(firstName,lastName);
+        setDegree(degree);
+    }
+
+
+    public String getDegree() {
+        return degree;
+    }
+
+    public void setDegree(String degree) {
+        this.degree = degree;
+    }
+}
+
+//////////////////////////////////  type 2 JOINED ////////////
+1 table person columns - id, first_name,last_name
+1 table students columns - id, grade  
+1 table teachers columns - id degree
+
+students and teacher have foreign keys to person table
+
+
+
+// person 
+
+package app.domain.entities;
+
+import javax.persistence.*;
+
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
+public class Person {
+    private long id;
+    private String firstName;
+    private String lastName;
+
+    protected Person(){
+    }
+
+    protected Person(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    @Column(name = "first_name")
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    @Column(name = "last_name")
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+}
+
+
+
+////////////////// type 3 SINGLE_TABLE/////////////////////
+creates 1 table people columns - id, type, first_name, last_name, degree, grade
+
+// person
+package app.domain.entities;
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = "people")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "type")
+public class Person {
+    private long id;
+    private String firstName;
+    private String lastName;
+
+    protected Person(){
+    }
+
+    protected Person(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    @Column(name = "first_name")
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    @Column(name = "last_name")
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+}
+
+
+
+//student
+
+package app.domain.entities;
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = "students")
+@DiscriminatorValue(value = "student")
+public class Student extends Person {
+
+    private int grade;
+
+    public Student(){
+
+    }
+    public Student(String firstName, String lastName, int grade){
+       super(firstName,lastName);
+       setGrade(grade);
+    }
+
+    @Column
+    public int getGrade() {
+        return grade;
+    }
+
+    public void setGrade(int grade) {
+        this.grade = grade;
+    }
+}
+
+//  teacher
+
+
+package app.domain.entities;
+
+import org.hibernate.annotations.GeneratorType;
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = "teachers")
+@DiscriminatorValue(value = "teacher")
+public class Teacher extends Person {
+
+    private String degree;
+
+    public Teacher(){
+    }
+    public Teacher(String firstName, String lastName, String degree){
+        super(firstName,lastName);
+        setDegree(degree);
+    }
+
+
+    public String getDegree() {
+        return degree;
+    }
+
+    public void setDegree(String degree) {
+        this.degree = degree;
+    }
+}
+
+
+
+
+// main 
+package app.domain;
+
+import app.domain.entities.Person;
+import app.domain.entities.Student;
+import app.domain.entities.Teacher;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+
+public class Main {
+    public static void main(String[] args) {
+
+        EntityManagerFactory entityManagerFactory = Persistence
+                .createEntityManagerFactory("codeFirst");
+
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+
+        Person student = new Student("Gosho","Georgiev",8);
+        Person teacher = new Teacher("Dimitur","Dimitrov","Java M");
+
+        entityManager.getTransaction().begin();
+        //Person person = entityManager.find(Student.class, (long) 1);
+        //Person person = entityManager.find(Student.class, (long) 1);
+        entityManager.persist(student);
+        entityManager.persist(teacher);
+        entityManager.getTransaction().commit();
+        entityManager.close();
+
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

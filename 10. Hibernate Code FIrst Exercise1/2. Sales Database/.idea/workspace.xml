@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="e280fdc9-e9cb-476e-b5eb-974ba8d2d056" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_DATA_SOURCES" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <option name="HIDDEN_KINDS">
+      <set />
+    </option>
+    <expand>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="@localhost" type="feb32156:DbDataSourceImpl" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="@localhost" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="importingSettings">
+      <MavenImportingSettings>
+        <option name="importAutomatically" value="true" />
+      </MavenImportingSettings>
+    </option>
+  </component>
+  <component name="ProjectId" id="1d26nlKSahUeoOIx88HRgMTssIe" />
+  <component name="ProjectViewState">
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="DatabaseDriversLRU" value="mysql" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java" />
+    <property name="settings.editor.selected.configurable" value="reference.projectsettings.compiler.annotationProcessors" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="entities" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\admin-pc\Desktop\Java_Programing\6.Spring Data\10. Hibernate Code FIrst Exercise1\2. Sales Database\src\main\java" />
+      <recent name="C:\Users\admin-pc\Desktop\Java_Programing\6.Spring Data\10. Hibernate Code FIrst Exercise1\2. Sales Database\src\main\resources" />
+      <recent name="C:\Users\admin-pc\Desktop\Java_Programing\6.Spring Data\10. Hibernate Code FIrst Exercise1\2. Sales Database" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="App" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="App" />
+      <module name="sales-database" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.App" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="e280fdc9-e9cb-476e-b5eb-974ba8d2d056" name="Default Changelist" comment="" />
+      <created>1591611009410</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1591611009410</updated>
+      <workItem from="1591611010952" duration="4828000" />
+      <workItem from="1591617598492" duration="40000" />
+      <workItem from="1591620166142" duration="1627000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="267" y="49" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1591611110339">
+      <screen x="0" y="0" width="1366" height="738" />
+    </state>
+    <state x="267" y="49" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.738@0.0.1366.738" timestamp="1591611110339" />
+    <state x="956" y="78" key="#com.intellij.ide.util.MemberChooser" timestamp="1591611663138">
+      <screen x="0" y="0" width="1366" height="738" />
+    </state>
+    <state x="956" y="78" key="#com.intellij.ide.util.MemberChooser/0.0.1366.738@0.0.1366.738" timestamp="1591611663138" />
+    <state x="510" y="153" key="FileChooserDialogImpl" timestamp="1591620524226">
+      <screen x="0" y="0" width="1366" height="738" />
+    </state>
+    <state x="510" y="153" key="FileChooserDialogImpl/0.0.1366.738@0.0.1366.738" timestamp="1591620524226" />
+    <state width="1306" height="123" key="GridCell.Tab.0.bottom" timestamp="1591623863684">
+      <screen x="0" y="0" width="1366" height="738" />
+    </state>
+    <state width="1306" height="123" key="GridCell.Tab.0.bottom/0.0.1366.738@0.0.1366.738" timestamp="1591623863684" />
+    <state width="1306" height="123" key="GridCell.Tab.0.center" timestamp="1591623863668">
+      <screen x="0" y="0" width="1366" height="738" />
+    </state>
+    <state width="1306" height="123" key="GridCell.Tab.0.center/0.0.1366.738@0.0.1366.738" timestamp="1591623863668" />
+    <state width="1306" height="123" key="GridCell.Tab.0.left" timestamp="1591623863668">
+      <screen x="0" y="0" width="1366" height="738" />
+    </state>
+    <state width="1306" height="123" key="GridCell.Tab.0.left/0.0.1366.738@0.0.1366.738" timestamp="1591623863668" />
+    <state width="1306" height="123" key="GridCell.Tab.0.right" timestamp="1591623863684">
+      <screen x="0" y="0" width="1366" height="738" />
+    </state>
+    <state width="1306" height="123" key="GridCell.Tab.0.right/0.0.1366.738@0.0.1366.738" timestamp="1591623863684" />
+    <state width="196" height="457" key="HiddenNamespacesPopup" timestamp="1591620410194">
+      <screen x="0" y="0" width="1366" height="738" />
+    </state>
+    <state width="196" height="457" key="HiddenNamespacesPopup/0.0.1366.738@0.0.1366.738" timestamp="1591620410194" />
+    <state x="639" y="284" width="326" height="234" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1591617474613">
+      <screen x="0" y="0" width="1366" height="738" />
+    </state>
+    <state x="639" y="284" width="326" height="234" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1/0.0.1366.738@0.0.1366.738" timestamp="1591617474613" />
+    <state x="0" y="0" key="com.intellij.ide.util.TipDialog" timestamp="1591617613785">
+      <screen x="0" y="0" width="1366" height="738" />
+    </state>
+    <state x="0" y="0" key="com.intellij.ide.util.TipDialog/0.0.1366.738@0.0.1366.738" timestamp="1591617613785" />
+    <state x="66" y="53" key="new project wizard" timestamp="1591620528876">
+      <screen x="0" y="0" width="1366" height="738" />
+    </state>
+    <state x="66" y="53" key="new project wizard/0.0.1366.738@0.0.1366.738" timestamp="1591620528876" />
+  </component>
+</project>

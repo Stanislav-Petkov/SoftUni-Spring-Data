@@ -1,0 +1,218 @@
+package app.domain.entities_S;
+
+import org.hibernate.annotations.ValueGenerationType;
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = "people")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "type")
+public abstract class Person {
+
+    private long id;
+    private String firstName;
+    private String lastName;
+
+    protected Person(){
+
+    }
+
+    protected Person(String firstName, String lastName){
+        setFirstName(firstName);
+        setLastName(lastName);
+    }
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    @Column(name = "first_name")
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    @Column(name = "last_name")
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+}
+
+
+/////////////////////////////////////
+
+
+package app.domain.entities_S;
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = "students")
+@DiscriminatorValue(value = "student")
+public class Student extends Person{
+    private int grade;
+
+    public Student(){
+
+    }
+
+    public Student(String firstName, String lastName, int grade){
+        super(firstName, lastName);
+        setGrade(grade);
+    }
+
+    @Column
+    public int getGrade() {
+        return grade;
+    }
+
+    public void setGrade(int grade) {
+        this.grade = grade;
+    }
+}
+
+
+
+
+////////////////////////////////////////////
+
+
+
+package app.domain.entities_S;
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = "teachers")
+@DiscriminatorValue(value = "teacher")
+public class Teacher extends Person{
+
+    private String degree;
+
+    public Teacher() {
+    }
+
+    public Teacher(String firstName, String lastName, String degree){
+        super(firstName,lastName);
+        setDegree(degree);
+    }
+
+    @Column
+    public String getDegree() {
+        return degree;
+    }
+
+    public void setDegree(String degree) {
+        this.degree = degree;
+    }
+}
+
+
+
+
+ //////////////////////////////////////////
+ 
+ package app.domain;
+
+import app.domain.entities_S.Person_S;
+import app.domain.entities_S.Student_S;
+import app.domain.entities_S.Teacher_S;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+
+public class Main {
+    public static void main(String[] args) {
+        EntityManagerFactory entityManagerFactory =
+                Persistence.createEntityManagerFactory("codeFirst");
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+//
+        Student student = new Student("Gosho", "Georgiev", 8);
+        Teacher teacher = new Teacher("Dimitur", "Dimitrov", "Java M");
+
+        entityManager.getTransaction().begin();
+//        Person person = entityManager.find(Student.class, (long)1);
+        entityManager.persist(student);
+        entityManager.persist(teacher);
+        entityManager.getTransaction().commit();
+        entityManager.close();
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

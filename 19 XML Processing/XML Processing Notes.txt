@@ -1,0 +1,27 @@
+@XmlAttribute(name = "country")
+private String country;     <address country="">
+
+// @XmlRootElement says that the class will be the root element in the xml
+@XmlRootElement
+public class UserDto {
+<UserDto>
+	<tag1>
+
+-----------------
+@XmlRootElement(name = "users")
+@XmlAccessorType(XmlAccessType.FIELD)
+public class UserRootDto {
+
+    /*
+    The name "user" in 
+    @XmlRootElement(name = "user") 
+        public class UserDto { }
+        must be the same as the user on this list field
+    @XmlElement(name = "user") // single user
+    private List<UserDto> users;
+     */
+    @XmlElement(name = "user") // user is for a single user dto name
+    private List<UserDto> users;
+
+--------------
+

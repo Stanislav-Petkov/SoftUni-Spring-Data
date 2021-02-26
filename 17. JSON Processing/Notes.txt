@@ -1,0 +1,33 @@
+Serialization is something to be made in a sequence of bytes or symbols
+
+BSON - byte, binary serialization
+JSON - text serialization
+XML - text serialization
+Binary xml - byte serialization
+
+binary serialization - is more efficient, more compact
+text serialization - is easier for inspecting, 
+more readable, goes through firewalls, because can be expected exactly what 
+is going through
+, better for debugging ,better for  logging
+
+
+text serialization of JSON and XML is extensible -  old services can work with the new data,
+which have more fields
+
+When new fields are added in the JSON/XML the old services will continue to work only
+with the old fields with which they have been working before, the new fields will be ignored
+
+
+In general
+
+Business logic should be in the domain servise
+
+Representation ans serialization of data should be in the web service/ web controller
+
+Persisting and mapping of object to the database  should be in he dao layer / repository layer
+
+Only the @Expose fields are serialized
+
+
+https://sites.google.com/site/gson/gson-user-guide#TOC-Serializing-and-Deserializing-Generic-Types

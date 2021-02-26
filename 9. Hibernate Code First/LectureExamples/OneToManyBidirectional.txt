@@ -1,0 +1,271 @@
+package app.domain.entities;
+
+import javax.persistence.*;
+
+@MappedSuperclass
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+public abstract class Person {
+    private long id;
+    private String firstName;
+    private String lastName;
+
+    protected Person(){
+
+    }
+
+    protected Person(String firstName, String lastName){
+        setFirstName(firstName);
+        setLastName(lastName);
+    }
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    @Column(name = "first_name")
+    public String getFirstName() {
+        return firstName;
+    }
+
+    private void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    @Column(name = "last_name")
+    public String getLastName() {
+        return lastName;
+    }
+
+    private void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+}
+
+
+//////////////////////////////////////
+
+
+package app.domain.entities;
+
+import javax.persistence.*;
+import java.util.Set;
+
+@Entity
+@Table(name = "projects")
+public class Project {
+
+    private long id;
+
+    private String name;
+
+    private Set<Student> students;
+
+    public Project(){
+
+    }
+
+    public Project(String name){
+        setName(name);
+    }
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    @Column
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    // One Project has many students
+    // mappedBy project is the field name in the Student class
+    @OneToMany(mappedBy = "project")
+    public Set<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(Set<Student> students) {
+        this.students = students;
+    }
+}
+
+
+////////////////////////////////////////
+
+
+package app.domain.entities;
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = "students")
+public class Student extends Person {
+
+    private int grade;
+
+    private Project project;
+
+    public Student(){
+
+    }
+
+    public Student(String firstName, String lastName, int grade){
+        super(firstName, lastName);
+        setGrade(grade);
+    }
+
+    @Column
+    public int getGrade(){
+        return this.grade;
+    }
+
+    public void setGrade(int grade) {
+        this.grade = grade;
+    }
+
+
+    @ManyToOne
+    @JoinColumn(name = "project_id", referencedColumnName = "id")
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
+    }
+}
+
+
+////////////////////////////////
+
+
+package app.domain.entities;
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = "teachers")
+public class Teacher extends Person{
+
+    private String degree;
+
+    public Teacher(){
+
+    }
+
+    public Teacher(String firstName, String lastName, String degree){
+        super(firstName, lastName);
+        setDegree(degree);
+    }
+
+    @Column
+    public String getDegree(){
+        return this.degree;
+    }
+    private void setDegree(String degree) {
+        this.degree = degree;
+    }
+
+}
+
+
+
+///////////////////////////////
+
+
+
+package app.domain;
+
+import app.domain.entities.Person;
+import app.domain.entities.Project;
+import app.domain.entities.Student;
+import app.domain.entities.Teacher;
+//import app.domain.entities_S.Student_S;
+//import app.domain.entities_S.Teacher_S;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import java.util.ArrayList;
+import java.util.List;
+
+public class Main {
+    public static void main(String[] args) {
+        EntityManagerFactory entityManagerFactory =
+                Persistence.createEntityManagerFactory("codeFirst");
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        Student student = new Student("Gosho", "Georgiev", 8);
+
+//        List<Project> projects = new ArrayList<>();
+
+        Project project = new Project("Math");
+//        Project project1 = new Project("Science");
+//        Project project2 = new Project("Biology");
+//        Project project3 = new Project("Chemistry");
+
+//        projects.add(project);
+//        projects.add(project1);
+//        projects.add(project2);
+//        projects.add(project3);
+
+        entityManager.getTransaction().begin();
+        entityManager.persist(project);
+        entityManager.getTransaction().commit();
+
+        student.setProject(project);
+
+        //// OLD
+
+        entityManager.getTransaction().begin();
+//        Person person = entityManager.find(Student.class, (long)1);
+//        entityManager.persist(teacher);
+        entityManager.persist(student);
+        entityManager.getTransaction().commit();
+        entityManager.close();
+
+
+
+//        Teacher teacher1 = student.getTeacher();
+//        System.out.println(teacher1.getFirstName());
+//        Student student1 = teacher.getStudent();
+//        System.out.println(student1.getFirstName());
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+///////////////

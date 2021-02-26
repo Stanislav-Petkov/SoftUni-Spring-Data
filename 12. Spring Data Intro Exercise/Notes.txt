@@ -1,0 +1,5 @@
+https://www.baeldung.com/spring-data-jpa-save-saveandflush
+
+https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html
+
+https://www.baeldung.com/spring-data-jpa-query

@@ -1,0 +1,364 @@
+package com.example.demo;
+
+import com.example.demo.service.dtos.UserDto;
+import com.example.demo.service.dtos.UserRootDto;
+import com.example.demo.service.dtos.UserSeedDto;
+import com.example.demo.service.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.List;
+
+@Component
+public class CmdRunner implements CommandLineRunner {
+
+    private final UserService userService;
+
+    @Autowired
+    public CmdRunner(UserService userService) {
+        this.userService = userService;
+    }
+
+    @Override
+    public void run(String... args) throws Exception {
+//        UserSeedDto userSeedDto1 = new UserSeedDto("Konstantin","Mitev","Sofia");
+//        UserSeedDto userSeedDto2 = new UserSeedDto("Gosho","Petkov","Varna");
+//        UserSeedDto userSeedDto3 = new UserSeedDto("Nikolay","Koev","Trun");
+//
+//        this.userService.save(userSeedDto1);
+//        this.userService.save(userSeedDto2);
+//        this.userService.save(userSeedDto3);
+        //Export single UserRootDto with list of UserDto
+//        List<UserDto>  users = this.userService.findAll();
+//        UserRootDto user = new UserRootDto();
+//        user.setUsers(users);
+
+        //export single userDto
+//        UserDto user = this.userService.findById(2);
+
+
+        // export from object to xml
+//        JAXBContext context = JAXBContext.newInstance(user.getClass());
+//        Marshaller marshaller = context.createMarshaller();
+//        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+//        marshaller.marshal(user,new File(USERS_FILE_PATH));
+
+        //Import java object from xml
+//        JAXBContext context = JAXBContext.newInstance(UserRootDto.class);
+//        Unmarshaller unmarshaller = context.createUnmarshaller();
+//        UserRootDto userRootDto = (UserRootDto) unmarshaller
+//                .unmarshal(new File(USERS_FILE_PATH));
+//
+//        this.userService.seedUsers();
+        this.userService.exportUsers();
+        System.out.println();
+//        UserSeedDto userSeedDto1 = new UserSeedDto("Konstantin","Mitev","Sofia");
+//        UserSeedDto userSeedDto2 = new UserSeedDto("Gosho","Petkov","Varna");
+//        UserSeedDto userSeedDto3 = new UserSeedDto("Nikolay","Koev","Trun");
+//
+//        this.userService.save(userSeedDto1);
+//        this.userService.save(userSeedDto2);
+//        this.userService.save(userSeedDto3);
+    }
+}
+
+
+package com.example.demo.utils;
+
+import org.springframework.context.annotation.Bean;
+
+import javax.xml.bind.JAXBException;
+import java.io.FileNotFoundException;
+
+public interface XMLParser {
+    // object is which object to export and path is to which path/xml file
+    <O> void exportToXML(O object, String path) throws JAXBException;
+
+    // path is from where to read the path/xml file
+    <O> O importFromXml(Class<O> klass, String path) throws JAXBException, FileNotFoundException;
+}
+
+
+package com.example.demo.utils;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+
+public class XMLParserImpl implements XMLParser{
+    @Override
+    public <O> void exportToXML(O object, String path) throws JAXBException {
+        JAXBContext context = JAXBContext.newInstance(object.getClass());
+        Marshaller marshaller = context.createMarshaller();
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT,true);
+        marshaller.marshal(object,new File(path));
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <O> O importFromXml(Class<O> klass, String path) throws JAXBException, FileNotFoundException {
+        JAXBContext context = JAXBContext.newInstance(klass);
+        Unmarshaller unmarshaller = context.createUnmarshaller();
+        return (O) unmarshaller.unmarshal(new FileReader(path));
+    }
+}
+
+
+package com.example.demo.service.dtos;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+// @XmlRootElement says that the class will be the root element in the xml
+//@XmlAccessorType(value = XmlAccessType.FIELD)  says that we will write the annotations
+//on he fields
+@XmlRootElement(name = "user")
+@XmlAccessorType(value = XmlAccessType.FIELD)
+public class UserDto {
+
+    @XmlElement(name = "first_name")
+    private String firstName;
+    @XmlElement
+    private String lastName;
+    @XmlElement
+    private String city;
+
+    public UserDto() {
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+}
+
+
+
+
+package com.example.demo.config;
+
+import com.example.demo.utils.XMLParser;
+import com.example.demo.utils.XMLParserImpl;
+import org.modelmapper.ModelMapper;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class ApplicationBeanConfiguration {
+
+    @Bean
+    public ModelMapper modelMapper(){
+        return new ModelMapper();
+    }
+
+    @Bean
+    public XMLParser xmlParser(){
+        return new XMLParserImpl();
+    }
+}
+
+
+package com.example.demo.data.entities;
+
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "users")
+public class User extends BaseEntity {
+
+    private String firstName;
+    private String lastName;
+    private String city;
+
+    public User(){
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+}
+
+
+package com.example.demo.service.dtos;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+// @XmlRootElement says that the class will be the root element in the xml
+//@XmlAccessorType(value = XmlAccessType.FIELD)  says that we will write the annotations
+//on he fields
+@XmlRootElement(name = "user")
+@XmlAccessorType(value = XmlAccessType.FIELD)
+public class UserDto {
+
+    @XmlElement(name = "first_name")
+    private String firstName;
+    @XmlElement
+    private String lastName;
+    @XmlElement
+    private String city;
+
+    public UserDto() {
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+}
+
+
+package com.example.demo.service.dtos;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import java.util.List;
+
+// The root element is in plural because it holds many single UserDto
+@XmlRootElement(name = "users")
+@XmlAccessorType(XmlAccessType.FIELD)
+public class UserRootDto {
+
+    /*
+    The name "user" in
+    @XmlRootElement(name = "user")
+        public class UserDto { }
+    must be the same as the user on this list field
+    @XmlElement(name = "user") // single user
+    private List<UserDto> users;
+     */
+
+    // The element is user, because it corresponds to a single user dto object
+    // user will be the xml tag for a single UserDto object in the users.xml
+    @XmlElement(name = "user") // user is for a single user dto name
+    private List<UserDto> users;
+
+    public UserRootDto() {
+    }
+
+    public List<UserDto> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<UserDto> users) {
+        this.users = users;
+    }
+}
+
+
+package com.example.demo.service.dtos;
+
+public class UserSeedDto {
+
+    private String firstName;
+    private String lastName;
+    private String city;
+
+    public UserSeedDto() {
+    }
+
+    public UserSeedDto(String firstName, String lastName, String city) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.city = city;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+}

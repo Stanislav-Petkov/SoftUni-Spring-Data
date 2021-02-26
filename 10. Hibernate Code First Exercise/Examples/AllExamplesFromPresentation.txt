@@ -1,0 +1,94 @@
+One-To-One Unidirectional
+
+@Entity
+@Table(name = "shampoos")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+public abstract class BasicShampoo implements Shampoo {
+
+    @OneToOne(optional = false)
+    @JoinColumn(name = "label_id", 
+    referencedColumnName = "id")
+    private BasicLabel label;
+
+}
+
+
+=============================================
+
+One-To-One Bidirectional
+
+@Entity
+@Table(name = "labels")
+public class BasicLabel implements Label{
+
+    @OneToOne(mappedBy = "label", 
+    targetEntity = BasicShampoo.class)
+    private BasicShampoo basicShampoo;
+
+}
+
+=============================================
+
+Many-To-One Unidirectional
+
+@Entity
+@Table(name = "shampoos")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+public abstract class BasicShampoo implements Shampoo {
+
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "batch_id", referencedColumnName = "id")
+    private ProductionBatch batch;
+
+}
+
+=============================================
+
+One-To-Many Bidirectional
+
+@Entity
+@Table(name = "batches")
+public class ProductionBatch implements Batch {
+
+    @OneToMany(mappedBy = "batch", targetEntity = BasicShampoo.class, 
+	       fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Shampoo> shampoos;
+
+}
+
+
+====================================================
+
+Many-To-Many Unidirectional
+
+@Entity
+@Table(name = "shampoos")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+public abstract class BasicShampoo implements Shampoo {
+
+//…
+    @ManyToMany
+    @JoinTable(name = "shampoos_ingredients",
+    joinColumns = @JoinColumn(name = "shampoo_id", referencedColumnName = "id"),
+    inverseJoinColumns = @JoinColumn(name = "ingredient_id", referencedColumnName = "id"))
+    private Set<BasicIngredient> ingredients;
+//…
+}
+
+====================================================
+
+Many-To-Many Bidirectional
+
+@Entity
+@Table(name = "ingredients")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
+public abstract class BasicIngredient implements Ingredient {
+
+
+    @ManyToMany(mappedBy = "ingredients", targetEntity = BasicShampoo.class)
+    private Set<BasicShampoo> shampoos;
+
+}
+

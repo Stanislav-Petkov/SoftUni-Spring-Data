@@ -1,0 +1,13 @@
+https://start.spring.io/
+generates a zip project
+
+spring boot
+2.2.5
+
+dependencies
+Lombok
+Spring web
+Mysql driver
+spring data jpa
+spring boot actuator
+spring boot devtools

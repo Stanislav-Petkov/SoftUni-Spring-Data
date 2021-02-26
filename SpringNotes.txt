@@ -1,0 +1,470 @@
+
+
+error:
+
+Found shared references to a collection: softuni.exam.models.entities.Car.pictures; 
+nested exception is org.hibernate.HibernateException: Found shared references to a collection: 
+softuni.exam.models.entities.Car.pictures
+
+
+ot kakvo se poluchava
+
+Offer offer = this.modelMapper.map(offerImportDto, Offer.class);
+
+Car car = this.carRepository.findById(offerImportDto.getCar().getId()).get();
+Seller seller = this.sellerRepository.findById(offerImportDto.getSeller().getId()).get();
+
+offer.setPictures(car.getPictures());
+offer.setCar(car);
+
+Car ima pictures
+setvame car na offer
+i posled setvame na offer sushtite pictures koito sa na kolata
+
+
+SOLUTION:
+
+offer.setPictures(new HashSet<>(car.getPictures()));
+
+slagash pictures kato nov hashset				
+
+========================================================
+
+
+error"
+Class has two properties of the same name "sellers"
+
+na xml root dto dobavi 
+
+@XmlAccessorType(XmlAccessType.FIELD)
+
+=+++============+============================================
+
+
+error":
+
+: [PersistenceUnit: default] Unable to build Hibernate SessionFactory; nested exception is org.hibernate.MappingException: Could not determine type for: java.util.Set, at table: games, for columns: [org.hibernate.mapping.Column(users)]
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.buildNativeEntityManagerFactory(AbstractEntityManagerFactoryBean.java:403) ~[spring-orm-5.2.10.RELEASE.jar:5.2.10.RELEASE]
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264) ~[na:na]
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128) ~[na:na]
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628) ~[na:na]
+	at java.base/java.lang.Thread.run(Thread.java:834) ~[na:na]
+Caused by: org.hibernate.MappingException: Could not determine type for: java.util.Set, at table: games, for columns: [org.hibernate.mapping.Column(users)]
+	at org.hibernate.mapping.SimpleValue.getType(SimpleValue.java:499) ~[hibernate-core-5.4.22.Final.jar:5.4.22.Final]
+	at org.hibernate.mapping.SimpleValue.isValid(SimpleValue.java:466) ~[hibernate-core-5.4.22.Final.jar:5.4.22.Final]
+	at org.hibernate.mapping.Property.isValid(Property.java:227) ~[hibernate-core-5.4.22.Final.jar:5.4.22.Final]
+	at org.hibernate.mapping.PersistentClass.validate(PersistentClass.java:624) ~[hibernate-core-5.4.22.Final.jar:5.4.22.Final]
+	at org.hibernate.mapping.RootClass.validate(RootClass.java:267) ~[hibernate-core-5.4.22.Final.jar:5.4.22.Final]
+	at org.hibernate.boot.internal.MetadataImpl.validate(MetadataImpl.java:354) ~[hibernate-core-5.4.22.Final.jar:5.4.22.Final]
+	at org.hibernate.boot.internal.SessionFactoryBuilderImpl.build(SessionFactoryBuilderImpl.java:465) ~[hibernate-core-5.4.22.Final.jar:5.4.22.Final]
+	at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl.build(EntityManagerFactoryBuilderImpl.java:1259) ~[hibernate-core-5.4.22.Final.jar:5.4.22.Final]
+	at org.springframework.orm.jpa.vendor.SpringHibernateJpaPersistenceProvider.createCo
+
+
+Solution:
+The field annotations must be only on the getters for the fields in every entity and in the base class
+
+BaseEntity
+@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Long getId() {
+        return id;
+    }
+	
+--------------------------------------
+import com.example.demo.utils.ValidatorUtil;
+import com.example.demo.utils.ValidatorUtilImpl;
+import org.modelmapper.ModelMapper;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import javax.validation.Validation;
+import javax.validation.Validator;
+
+@Configuration
+public class ApplicationBeanConfiguration {
+
+    @Bean
+    public ModelMapper modelMapper(){
+        return new ModelMapper();
+    }
+
+    @Bean
+    public Validator validator(){
+        return Validation.buildDefaultValidatorFactory().getValidator();
+    }
+    
+    @Bean
+    public ValidatorUtil validatorUtil(){
+        return new ValidatorUtilImpl(validator());
+    }
+}
+
+
+-------------------------------------------------
+
+Validator util implementation
+
+project 16-dto-mappings
+
+import javax.validation.ConstraintViolation;
+import java.util.Set;
+
+public interface ValidatorUtil {
+
+    <E> boolean isValid(E entity);
+
+    <E> Set<ConstraintViolation<E>> violations(E entity);
+}
+
+
+----
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
+import java.util.Set;
+
+@Component
+public class ValidatorUtilImpl implements ValidatorUtil{
+    private final Validator validator;
+
+    @Autowired
+    public ValidatorUtilImpl(Validator validator) {
+        this.validator = validator;
+    }
+
+    @Override
+    public <E> boolean isValid(E entity) {
+        // If the  returned Set<ConstraintViolation<E>> is empty is true the entity is valid
+        return this.validator.validate(entity).isEmpty();
+    }
+
+    @Override
+    public <E> Set<ConstraintViolation<E>> violations(E entity) {
+        return this.validator.validate(entity);
+    }
+}
+
+---------------------------------------------------------
+
+project 15-mapping-dto-lab
+
+
+add type mapping
+TypeMap
+
+
+// Fetch all managers and map them to ManagerDto
+        TypeMap<Employee, ManagerDto> managerTypeMap = mapper.createTypeMap(Employee.class, ManagerDto.class)
+                .addMappings(m -> {
+                    m.map(Employee::getSubordinates, ManagerDto::setEmployees);
+                    m.map(src -> src.getAddress().getCity(), ManagerDto::setCity);
+                    // Set which field in the destination dto will not be mapped
+                    //m.skip(ManagerDto::setCity);
+                });
+
+        mapper.getTypeMap(Employee.class,EmployeeDto.class).addMapping(
+                src -> src.getAddress().getCity(),EmployeeDto::setCity
+        );
+        // Checks if there are fields in the ManagerDto that are not set
+        mapper.validate();
+
+
+--------------------------------------------------------------
+
+With UPDATE ro delete we can set @Transactional over the repository query
+
+
+Error Caused by: org.springframework.dao.InvalidDataAccessApiUsageException: Executing an update/delete query;
+ nested exception is javax.persistence.TransactionRequiredException: Executing an update/delete query
+
+
+@Transactional
+    @Modifying
+    @Query("UPDATE Book AS b SET b.copies = b.copies + :copiesToAdd WHERE b.releaseDate > :newReleaseDate")
+    int updateCopies(int copiesToAdd, LocalDate newReleaseDate);
+	
+
+---------------------------------------------
+WIth UPDATE or DELETE  we must set @Modifying
+
+Error Caused by: java.lang.IllegalStateException: org.hibernate.hql.internal.QueryExecutionRequestException: Not supported for DML operations [UPDATE com.softuni.springintroex.domain.entities.Book AS b SET b.copies = b.copies + :copiesToAdd WHERE b.releaseDate > :newReleaseDate]
+	at org.hibernate.query.internal.AbstractProducedQuery.list(AbstractProducedQuery.java:1536) ~[hibernate-core-5.4.22.Final.jar:5.4.22.Final]
+	at org.hibernate.query.internal.AbstractProducedQuery.getSingleResult(AbstractProducedQuery.java:1581) ~[hibernate-core-5.4.22.Final.jar:5.4.22.Final]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:na]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:64) ~[na:na]
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:564) ~[na:na]
+
+
+--------------------------------------
+
+reverse order a map by values
+authorCopies.entrySet().stream()
+                .sorted((current, next) -> Integer.compare(next.getValue(), current.getValue()))
+                .forEach(author -> System.out.printf("%s %d %n", author.getKey(), author.getValue()));
+
+----------------------------------------------------
+
+
+jpql queries https://javaee.github.io/tutorial/persistence-querylanguage005.html#BNBUD
+
+https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods.query-creation
+===================================
+
+If there is @Transactional on a method 
+
+@Transactional
+public void run(String... args) throws Exception {
+
+// and inside the method we call another method  updatePriceOfIngredientsInList
+ingredientRepo.updatePriceOfIngredientsInList(
+                        Set.of("Lavender","Herbs","Apple"), 0.1));
+
+This method updatePriceOfIngredientsInList also has @Transactional the update in the inner method will not finish, because
+The outer transaction will be prolonged. In order to see the result in the outer method after the inner method has
+finished the outer method should not have a @Transactional so that there is no outer transaction
+			
+	@Transactional
+	@Modifying
+	@Query("UPDATE Ingredient AS i SET i.price = i.price * (1.0 + :percentage) " +
+			" WHERE i.name IN :names ")
+	int updatePriceOfIngredientsInList(@Param("names") Iterable<String> ingredient_names,
+									   @Param("percentage") double percentage);
+									   
+	
+}	
+-------------------------------------------
+
+error : Caused by: javax.persistence.TransactionRequiredException: No EntityManager with actual transaction available for current thread - cannot reliably process 'remove' call
+
+Put @Transactional over the repository
+===================================================
+
+error Plugin 'org.springframework.boot:spring-boot-maven-plugin:' not found
+spring-boot-maven-plugin is red
+
+solution add version:
+
+ <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>2.3.5.RELEASE</version>
+            </plugin>
+        </plugins>
+    </build>
+==========================================================
+JPQL Query creation from method names
+https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#reference
+Example 13. Query creation from method names
+
+-----------------------------------------------------------
+
+DateTimeFormatter format date
+
+https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html
+
+LocalDate date = LocalDate.now();
+  DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy MM dd");
+  String text = date.format(formatter);
+  LocalDate parsedDate = LocalDate.parse(text, formatter);
+ 
+ 
+ ofPattern() is the pattern from which we get 
+ 
+ 
+ 
+ 
+ -----------------------------------------
+ error: Caused by: org.hibernate.LazyInitializationException: failed to lazily initialize a collection of role: com.e
+ 
+If I want to access the books of the author when i use the author, i have to set
+fetch = FetchType.EAGER
+
+ @OneToMany(mappedBy = "author", fetch = FetchType.EAGER)
+    public Set<Book> getBooks() {
+        return books;
+    }
+-------------------------------------
+@Transactional se slaga
+
+error : Method threw LazyInitializationException
+--------------------------------------------------
+
+settings 
+
+File - Settings - Build, Execution, Deployment, Build tools, Maven, Importing, JDK for importer : 15
+File - Settings - Build, Execution, Deployment, Java Compiler , target bytecode version 15
+
+===================================================
+
+Error : Could not determine type for: com.
+Set Id on the public getter like:
+
+@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Long getId() {
+        return id;
+    }
+	
+======================================================
+
+ENUM  enum annotation
+@Enumerated(EnumType.ORDINAL) 
+
+==============================
+@Transactional
+import org.springframework.transaction.annotation.Transactional;
+// Every business method like register is in a separate transaction which is committed when the
+// method execution has finished, if there is no Exception there is a commit
+// if there is a Runtime Exception there is a rollback
+
+=========================================
+
+    // All runtime exceptions by default rollback a transaction
+
+================================================
+Spring data by default catches the exceptions and rollbacks
+
+By default each repository operation is with its own transaction
+
+@Transactional
+http://localhost:63342/springdata-intro/jakarta.transaction-api-1.3.3-javadoc.jar/javax/transaction/Transactional.html?_ijt=u3jr7b28otagsuqu3oinqmsbuq
+
+
+
+https://thedomaindrivendesign.io/developing-the-ubiquitous-language/
+
+CRUD repository INTERFACE
+https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#repositories.core-concepts
+
+Pageable:
+https://docs.spring.io/spring-data/commons/docs/current/api/org/springframework/data/domain/Pageable.html
+
+----------------
+LazyInitializationException --  Try to set @Transactional over the SericeImpl class
+
+--------------------
+@ManyToMany
+cannot auto fill/ auto import  ids into a mapping table
+
+Owning side should be saved  Car is the owning side
+saveAndFlush() should be on the owning side, then the values will be filled in
+the mapping table
+https://stackoverflow.com/questions/33703431/jpa-manytomany-relationship-middle-table-is-not-updated
+
+
+Car class
+@ManyToMany(cascade = {ALL})
+public Set<Part> getParts() {
+        return parts;
+    }
+	
+//Not owning side
+@ManyToMany(mappedBy = "parts",fetch = FetchType.EAGER)//,
+public Set<Car> getCars() {
+	return cars;
+}
+
+CarServiceImpl class
+Car car = this.modelMapper.map(carSeedDto,Car.class);
+car.setParts(new HashSet<>(this.partService.getRandomParts()));
+
+this.carRepository.saveAndFlush(car);
+
+
+
+=====================================
+
+
+-----------------------------------------------
+
+@Component
+Is set on the objects which we want to be part of 
+the spring application or spring boot application
+
+Component annotation registers the class as a single bean.
+
+
+With @Component we say that this class should be ran immediately after the
+spring project was booted
+
+When we run the spring app , first it generates the database, then
+writes the port of the app, logs info 
+and then goes to the @Component object and its idea is like the main method
+
+@Controller is not ran immediately, it waits on a given address or route
+an operation to be executed
+
+@Component
+public class CmdRunner implements CommandLineRunner {
+    @Override
+    public void run(String... args) throws Exception {
+        
+    }
+}
+
+@Controller
+The controller class handles queries of given methods of given paths
+
+
+Spring framework annotations
+https://springframework.guru/spring-framework-annotations/#:~:text=The%20%40Controller%20annotation%20allows%20autodetection,registering%20bean%20definitions%20for%20them.&text=The%20Java%20class%20annotated%20with,Spring%20MVC%20and%20Spring%20WebFlux.
+
+@Configuration
+This annotation is used on classes which define beans. 
+@Configuration is an analog for XML configuration file – it is configuration 
+using Java class. Java class annotated with @Configuration is a configuration by
+ itself and will have methods to instantiate and configure the dependencies.
+
+
+@Bean
+
+https://stackoverflow.com/questions/17193365/what-in-the-world-are-spring-beans
+
+-------------------------
+
+IoC
+Inversion of control- It means giving the control of creating
+ and instantiating the spring beans to the Spring IOC container and the only 
+work the developer does is configuring the beans in the spring xml file.
+https://stackoverflow.com/questions/9403155/what-is-dependency-injection-and-inversion-of-control-in-spring-framework#:~:text=Inversion%20of%20control%2D%20It%20means,in%20the%20spring%20xml%20file.
+
+-----------------------------
+
+https://stackoverflow.com/questions/6827752/whats-the-difference-between-component-repository-service-annotations-in
+
+@Repository’s 
+job is to catch platform
+ specific exceptions and re-throw them as one of Spring’s unified unchecked exception. 
+ 
+
+@Controller
+ The dispatcher scans the classes annotated with @Controller and d
+ etects methods annotated with @RequestMapping annotations within them. We can use @RequestMapping on/in only those methods whose classes are annotated with @Controller
+ and it will NOT work with @Component, @Service, @Repository etc.
+ 
+@Service
+it's holding the business logic
+
+
+--------------------------
+
+
+@Bean 
+put on every class which we need and will be injected through a constructor
+Then springg starts managing this class for us and injects it with dependency injection
+through a constructor
+
+____-----------------------------
+
+@XmlAccessorType
+https://docs.oracle.com/javase/8/docs//api/javax/xml/bind/annotation/XmlAccessType.html
+
+______________________________________________
+

@@ -1,0 +1,240 @@
+USer
+package com.example.demo.entities;
+
+import javax.persistence.*;
+import java.util.Set;
+
+@Entity
+@Table(name = "users")
+public class User extends BaseEntity {
+    private int age;
+    private String firstName;
+    private String lastName;
+    private Set<Product> productsSold;
+    private Set<Product> productsBought;
+    private Set<User> friends;
+
+    @Column(name = "age")
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    @Column(name = "first_name")
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    @Column(name = "last_name")
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    @OneToMany(mappedBy = "sellerId")
+    public Set<Product> getProductsSold() {
+        return productsSold;
+    }
+
+    public void setProductsSold(Set<Product> productsSold) {
+        this.productsSold = productsSold;
+    }
+
+    @OneToMany(mappedBy = "buyerId")
+    public Set<Product> getProductsBought() {
+        return productsBought;
+    }
+
+    public void setProductsBought(Set<Product> productsBought) {
+        this.productsBought = productsBought;
+    }
+
+    @OneToMany
+    @JoinTable(name = "users_friends",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "friend_id", referencedColumnName = "id")
+    )
+    public Set<User> getFriends() {
+        return friends;
+    }
+
+    public void setFriends(Set<User> friends) {
+        this.friends = friends;
+    }
+
+
+Product
+
+package com.example.demo.entities;
+
+import javax.persistence.*;
+import java.math.BigDecimal;
+import java.util.Set;
+
+@Entity
+@Table(name = "products")
+public class Product extends BaseEntity {
+
+    private String name;
+    private BigDecimal price;
+    private User buyerId;
+    private User sellerId;
+    private Set<Category> categories;
+
+
+    @Column
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Column
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "buyer_id")
+    public User getBuyerId() {
+        return buyerId;
+    }
+
+    public void setBuyerId(User buyerId) {
+        this.buyerId = buyerId;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "seller_id")
+    public User getSellerId() {
+        return sellerId;
+    }
+
+    public void setSellerId(User sellerId) {
+        this.sellerId = sellerId;
+    }
+
+    @ManyToMany
+    @JoinTable(
+            name = "products_categories",
+            joinColumns = {@JoinColumn(name = "products_id")},
+            inverseJoinColumns = {@JoinColumn(name = "categories_id")}
+    )
+    public Set<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(Set<Category> categories) {
+        this.categories = categories;
+    }
+
+}
+
+
+Category
+package com.example.demo.entities;
+
+import org.hibernate.validator.constraints.Length;
+
+import javax.persistence.*;
+import java.util.Set;
+
+@Entity
+@Table(name = "categories")
+public class Category extends BaseEntity{
+
+    private String name;
+    private Set<Product> products;
+
+    public Category(){
+
+    }
+
+    @Column(name = "name")
+    @Length(min = 3, max = 15, message = "Wrong category name")
+    public String getName(){
+        return name;
+    }
+
+    public void setName(String name){
+        this.name = name;
+    }
+
+    @ManyToMany(mappedBy = "categories", fetch = FetchType.EAGER)
+    public Set<Product> getProducts(){
+        return products;
+    }
+
+    public void setProducts(Set<Product> products){
+        this.products = products;
+    }
+}
+
+
+
+BaseCategory
+
+package com.example.demo.entities;
+
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
+
+@MappedSuperclass
+public abstract class BaseEntity {
+
+    private Long id;
+
+    public BaseEntity(){
+
+    }
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Long getId(){
+        return this.id;
+    }
+
+    public void setId(Long id){
+        this.id = id;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

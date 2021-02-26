@@ -1,0 +1,37 @@
+[
+  {
+    "fullName": "Lino Subia",
+    "boughtCars": 3,
+    "spentMoney": 923.98
+  },
+  {
+    "fullName": "Hai Everton",
+    "boughtCars": 4,
+    "spentMoney": 245.32
+  },
+  {
+    "fullName": "Daniele Zarate",
+    "boughtCars": 4,
+    "spentMoney": 241.18
+  },
+  {
+    "fullName": "Johnette Derryberry",
+    "boughtCars": 6,
+    "spentMoney": 158.98
+  },
+  {
+    "fullName": "Nisha Markwell",
+    "boughtCars": 5,
+    "spentMoney": 142.32
+  },
+  {
+    "fullName": "Taina Achenbach",
+    "boughtCars": 2,
+    "spentMoney": 130.99
+  },
+  {
+    "fullName": "Zada Attwood",
+    "boughtCars": 5,
+    "spentMoney": 100.99
+  }
+]

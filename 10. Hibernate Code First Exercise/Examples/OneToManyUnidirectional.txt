@@ -1,0 +1,226 @@
+package entities.demo_hcf;
+
+import entities.BaseEntity;
+
+import javax.persistence.*;
+import java.util.Set;
+
+@Entity
+@Table(name = "courses")
+public class Course extends BaseEntity {
+
+    private String name;
+    private Set<Student> students;
+    private Teacher teacher;
+
+    public Course() {
+    }
+
+    @Column(name = "name", nullable = false, unique = true)
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @ManyToMany
+    @JoinTable(name = "courses_students",
+            joinColumns = @JoinColumn(name = "course_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id")
+    )
+    public Set<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(Set<Student> students) {
+        this.students = students;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "teacher_id", referencedColumnName = "id")
+    public Teacher getTeacher() {
+        return teacher;
+    }
+
+    public void setTeacher(Teacher teacher) {
+        this.teacher = teacher;
+    }
+}
+
+
+---------------
+package entities.demo_hcf;
+
+import entities.BaseEntity;
+
+import javax.persistence.*;
+
+@MappedSuperclass
+public abstract class Person extends BaseEntity {
+    private String name;
+
+    public Person(){
+
+    }
+
+    @Column(name = "name", nullable = false, unique = true)
+    public String getName(){
+        return name;
+    }
+
+    public void setName(String name){
+        this.name = name;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------------------------------
+
+package entities.demo_hcf;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+import java.util.Set;
+
+@Entity
+@Table(name = "students")
+public class Student extends Person{
+
+    private double grade;
+    private Set<Course> courses;
+
+    public Student(){
+
+    }
+
+    @Column(name = "grade")
+    public double getGrade() {
+        return grade;
+    }
+
+    public void setGrade(double grade) {
+        this.grade = grade;
+    }
+
+    @ManyToMany(mappedBy = "students", targetEntity = Course.class)
+    public Set<Course> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(Set<Course> courses) {
+        this.courses = courses;
+    }
+}
+
+
+-------------------------
+package entities.demo_hcf;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "teachers")
+public class Teacher extends Person {
+
+    private String speciality;
+
+    public Teacher() {
+    }
+
+    @Column(name = "speciality")
+    public String getSpeciality() {
+        return speciality;
+    }
+
+    public void setSpeciality(String speciality) {
+        this.speciality = speciality;
+    }
+}
+
+
+----------------------------
+
+package entities;
+
+import javax.persistence.*;
+
+@MappedSuperclass
+public abstract class BaseEntity {
+    private long id;
+
+    public BaseEntity(){
+
+    }
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+}
+
+
+-------------------
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+
+public class App {
+    public static void main(String[] args) {
+        EntityManagerFactory entityManagerFactory = Persistence
+                .createEntityManagerFactory("h_test");
+//        EntityManager entityManager = entityManagerFactory.createEntityManager();
+//        Engine engine = new Engine(entityManager);
+//        engine.run();
+    }
+}
+
+
+----------------------------
+import javax.persistence.EntityManager;
+
+public class Engine implements Runnable {
+
+    private final EntityManager entityManager;
+
+    public Engine(EntityManager entityManager){
+        this.entityManager = entityManager;
+    }
+    @Override
+    public void run() {
+
+    }
+}
+
+-
+
+

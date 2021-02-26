@@ -1,0 +1,64 @@
+https://github.com/iproduct/spring-data/tree/master/advanced-query
+
+30 min
+
+@Entity
+@Data
+@Table(name = "shampoos")
+@AllArgsConstructor
+@NoArgsConstructor
+public class Shampoo {
+    @Id
+    @GeneratedValue(strategy = IDENTITY)
+    private long id;
+    private String brand;
+    private double price;
+
+    @Enumerated(ORDINAL)
+    private Size size;
+
+    // optional = true - There might not exist a label for the shampoo
+    @ManyToOne(optional = true, cascade = )
+    private Label label;
+}
+
+When we have ManyToOne the cascade should NOT be All,
+if it is All when we delete 1 Shampoo it will delete its Label, which is shared among many Shampoos
+// If CascadeType.Persist is used. when a shampoo with a Label is created, the Label will be Persisted also
+
+
+
+https://vladmihalcea.com/a-beginners-guide-to-jpa-and-hibernate-cascade-types/
+
+@Query
+Is from spring data
+
+
+Slice gets part of the entites
+https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.modifying-queries
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

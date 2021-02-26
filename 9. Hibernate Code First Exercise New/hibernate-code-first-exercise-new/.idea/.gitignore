@@ -1,0 +1,8 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+# Datasource local storage ignored files
+/../../../../../../../../../:\Users\admin-pc\Desktop\Java_programming\6.Spring Data\9. Hibernate Code First Exercise New\hibernate-code-first-exercise-new\.idea/dataSources/
+/dataSources.local.xml
+# Editor-based HTTP Client requests
+/httpRequests/
